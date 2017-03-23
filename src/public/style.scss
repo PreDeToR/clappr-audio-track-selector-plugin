@@ -61,6 +61,11 @@
   }
 }
 
+.hidden
+{
+  display:none;
+}
+
 @-webkit-keyframes pulse {
   0% {color: #fff;}
   50% {color: #ff0101}

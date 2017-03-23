@@ -53,7 +53,7 @@ export default class AudioTrackSelector extends UICorePlugin {
       this.listenTo(currentPlayback, Events.PLAYBACK_LEVELS_AVAILABLE, this.fillLevels)
       //this.listenTo(currentPlayback, Events.PLAYBACK_LEVEL_SWITCH_START, this.startLevelSwitch)
       //this.listenTo(currentPlayback, Events.PLAYBACK_LEVEL_SWITCH_END, this.stopLevelSwitch)
-      //this.listenTo(currentPlayback, Events.PLAYBACK_BITRATE, this.updateCurrentLevel)
+      this.listenTo(currentPlayback, Events.PLAYBACK_BITRATE, this.updateCurrentLevelVideo)
 
       //console.log(' Audio-Track bindPlaybackEvents'+currentPlayback);
       var playbackLevelsAvaialbeWasTriggered = currentPlayback.levels && currentPlayback.levels.length > 0
@@ -112,16 +112,37 @@ export default class AudioTrackSelector extends UICorePlugin {
       for(var x=0;x<this.audiotrack.length;x++)
       {
         this.audiotrack[x].id=x;
-        if(this.audiotrack[x].default==true)
+      }
+      
+      
+      for(var x=0;x<this.audiotrack.length;x++)
+      {
+        //console.log (x);
+        if(this.audiotrack[x].groupId == this.core.getCurrentPlayback()._hls.streamController.levels[+this.core.getCurrentPlayback()._hls.streamController.level].attrs.AUDIO)
         {
-          this.updateCurrentLevel(this.audiotrack[x])
-          this.selectedLevelId = x 
-          this.currentLevel = this.audiotrack[x]
+          
+          //console.log('a group match, selecting default('+this.audiotrack[x].groupId +')('+this.core.getCurrentPlayback()._hls.streamController.levels[+this.core.getCurrentPlayback()._hls.streamController.level].attrs.AUDIO+')');
+          if(this.audiotrack[x].default == true)
+          {
+            //console.log('selecting');
+            //console.log(this.audiotrack[x]);
+            this.selectedLevelId = x
+            
+            this.currentLevel=this.audiotrack[this.selectedLevelId]
+            this.core.getCurrentPlayback()._hls.audioTrack= this.selectedLevelId;          
+            this.highlightCurrentLevel();          
+          }
         }
       }
+      
     this.configureLevelsLabels()
     //
     this.render()
+    
+    var group = this.core.getCurrentPlayback()._hls.streamController.levels[this.core.getCurrentPlayback()._hls.streamController.level].attrs.AUDIO;
+    this.agroupElement().addClass('hidden');
+    this.$('.audio_track_selector ul a[data-level-group-selector-select="'+group+'"]').parent().removeClass('hidden')
+    
   }
 
   configureLevelsLabels() {
@@ -185,6 +206,7 @@ export default class AudioTrackSelector extends UICorePlugin {
   buttonElement() { return this.$('.audio_track_selector button') }
 
   levelElement(id) {  return this.$('.audio_track_selector ul a'+(!isNaN(id) ? '[data-audio-track-selector-select="audio_'+id+'"]' : '')).parent() }
+  agroupElement(gid) { return this.$('.audio_track_selector ul a'+(!isNaN(gid) ? '[data-level-group-selector-select="'+gid+'"]' : '')).parent() }
 
   getTitle() { return (this.core.options.AudioTrackSelectorConfig || {}).name }
 
@@ -209,6 +231,41 @@ export default class AudioTrackSelector extends UICorePlugin {
 //     console.log(level);
     this.currentLevel = level ? level : null
     this.highlightCurrentLevel()
+  }
+  updateCurrentLevelVideo(info) {
+    //console.log(' Audio-Track updateCurrentLevelVideo');
+    
+    if(this.audiotrack ==undefined) return;
+    if(this.audiotrack.length == 0 ) return;
+    
+    //console.log(' Audio-Track updateCurrentLevelVideo2');
+    
+    var group = this.core.getCurrentPlayback()._hls.streamController.levels[info.level].attrs.AUDIO;
+    this.agroupElement().addClass('hidden');
+    this.$('.audio_track_selector ul a[data-level-group-selector-select="'+group+'"]').parent().removeClass('hidden')
+
+    for(var x=0;x<this.audiotrack.length;x++)
+    {
+      if(this.audiotrack[x].groupId == this.core.getCurrentPlayback()._hls.streamController.levels[info.level].attrs.AUDIO)
+      {
+        //this.agroupElement(this.audiotrack[x].groupId).removeClass('hidden')        
+//         console.log('a group match, selecting default('+this.audiotrack[x].groupId +')('+this.core.getCurrentPlayback()._hls.streamController.levels[info.level].attrs.AUDIO+')');
+        if(this.audiotrack[x].default == true)
+        {
+          //console.log('selecting');
+          //console.log(this.audiotrack[x]);
+          this.selectedLevelId = x
+          
+          if (this.currentLevel.id == this.selectedLevelId) return false;
+          
+          this.currentLevel=this.audiotrack[this.selectedLevelId]
+          this.core.getCurrentPlayback()._hls.audioTrack= this.selectedLevelId;          
+          this.highlightCurrentLevel();          
+        }
+      }
+    }
+    //
+    //
   }
   highlightCurrentLevel() {
     //console.log(' Audio-Track highlightCurrentLevel ('+this.currentLevel.id+')');

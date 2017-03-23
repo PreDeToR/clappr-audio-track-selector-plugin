@@ -6,6 +6,6 @@
   <li data-title><%= title %></li>
   <% }; %>
   <% for (var i = 0; i < levels.length; i++) { %>
-    <li><a href="#" data-audio-track-selector-select="audio_<%= i %>"><%= levels[i].name %></a></li>
+    <li><a href="#" data-audio-track-selector-select="audio_<%= i %>" data-level-group-selector-select="<%= levels[i].groupId %>"><%= levels[i].name %></a></li>
   <% }; %>
 </ul>
