@@ -27,14 +27,14 @@ var player = new Clappr.Player({
 
 
 ## Compatibility
-Only been tested on :
-PC:
-  FireFox v52.0
-  Opera v30.0
-  Chrome/Chromium v56.0.2924
-Mobile:
-  Android v5.0.1 (Default Browser,Chrome)
-  iOS v10.2.1 (Default Browser,Chrome,Opera Mini)
+Only been tested on :<br/>
+PC:<br/>
+  FireFox v52.0<br/>
+  Opera v30.0<br/>
+  Chrome/Chromium v56.0.2924<br/>
+Mobile:<br/>
+  Android v5.0.1 (Default Browser,Chrome)<br/>
+  iOS v10.2.1 (Default Browser,Chrome,Opera Mini)<br/>
 
 
 All the playbacks that follow these rules:
