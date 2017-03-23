@@ -1,7 +1,7 @@
 # Clappr Audio Track Selector Plugin
 Designed to work with HLS video streams.
 
-<img src="https://raw.githubusercontent.com/lucasmundim/clappr-level-selector-plugin/master/screenshot.png"/>
+<img src="https://raw.githubusercontent.com/PreDeToR/clappr-audio-track-selector-plugin/master/screenshot.png"/>
 
 ## Usage
 
@@ -14,13 +14,13 @@ Add both Clappr and Audio Track Selector plugin scripts to your HTML:
 </head>
 ```
 
-Then just add `AudioSelector` into the list of plugins of your player instance:
+Then just add `AudioTrackSelector` into the list of plugins of your player instance:
 
 ```javascript
 var player = new Clappr.Player({
   source: "http://your.video/here.m3u8",
   plugins: {
-    'core': [AudioSelector]
+    'core': [AudioTrackSelector]
   }
 });
 ```
