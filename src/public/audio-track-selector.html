@@ -1,0 +1,11 @@
+<button data-audio-track-selector-button>
+  Auto
+</button>
+<ul>
+  <% if (title) { %>
+  <li data-title><%= title %></li>
+  <% }; %>
+  <% for (var i = 0; i < levels.length; i++) { %>
+    <li><a href="#" data-audio-track-selector-select="audio_<%= i %>"><%= levels[i].name %></a></li>
+  <% }; %>
+</ul>
